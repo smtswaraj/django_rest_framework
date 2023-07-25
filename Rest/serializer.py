@@ -56,9 +56,10 @@ class TodoSerializer(serializers.ModelSerializer):
 
 
 class TimingTodoSerializer(serializers.ModelSerializer):
-     
+        todo = TodoSerializer()  # for giting the forign key data
         class Meta:
              model = TimingTodo
              exclude = ['created_at', 'updated_at']
+            #  depth = 1    # for giting the forign key data
 
 
