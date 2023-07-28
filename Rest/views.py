@@ -1,3 +1,4 @@
+from rest_framework import authentication, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializer import TodoSerializer,TimingTodoSerializer
@@ -112,16 +113,20 @@ def patch_todo(request):
     
 
 class TodoView(APIView):
-    
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAdminUser]
     def get(self, request):
-
+        print(request.user)
+        todo_objs = Todo.objects.filter(user = request.user)
+        serializer = TodoSerializer(todo_objs, many = True)
         return Response({
             'status':200,
-            'message':'You called GET methode'
+            'message':'You called GET methode',
+            'data': serializer.data 
         })
 
     def post(self, request):
-
+        data = request.data
         return Response({
             'status':200,
             'message':'You called POST methode'

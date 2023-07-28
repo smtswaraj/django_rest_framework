@@ -4,4 +4,4 @@ from .models import TimingTodo, Todo
 
 
 admin.site.register(Todo)
-admin.site.register(TimingTodo)
+# admin.site.register(TimingTodo)

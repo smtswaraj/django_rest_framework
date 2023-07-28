@@ -1,5 +1,7 @@
 import uuid
 from django.db import models
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 # Create your models here.
 class BaseModel(models.Model):
@@ -11,6 +13,7 @@ class BaseModel(models.Model):
         abstract = True
 
 class Todo(BaseModel):
+    user = models.ForeignKey(User,on_delete=models.SET_NULL, null = True, blank=True)
     todo_title = models.CharField(max_length=100)
     todo_description = models.TextField()
     is_done = models.BooleanField(default=False)
