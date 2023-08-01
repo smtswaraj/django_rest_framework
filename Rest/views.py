@@ -6,6 +6,7 @@ from .models import Todo,TimingTodo
 from rest_framework.views import APIView
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from django.core.paginator import Paginator
 # Create your views here.
 
 @api_view(['GET','POST','PATCH'])
@@ -118,6 +119,12 @@ class TodoView(APIView):
     def get(self, request):
         print(request.user)
         todo_objs = Todo.objects.filter(user = request.user)
+        page = request.GET.get('page',1)
+        page_obj = Paginator(todo_objs, page)
+        print(page_obj)
+
+
+
         serializer = TodoSerializer(todo_objs, many = True)
         return Response({
             'status':200,
@@ -126,11 +133,29 @@ class TodoView(APIView):
         })
 
     def post(self, request):
-        data = request.data
-        return Response({
-            'status':200,
-            'message':'You called POST methode'
-        })
+        try:
+           data = request.data
+           data['user'] = request.user.id
+           print(data)
+           serializer = TodoSerializer(data = data)
+           if serializer.is_valid():
+                serializer.save()
+                return Response({
+                        'status':True,
+                        'message':'success data',
+                        'data': serializer.data
+                    })
+           return Response({
+                'status':False,
+                'message':'success data',
+                'data': serializer.errors
+            })
+        except Exception as e:
+            print(e)
+            return Response({
+                'status':False,
+                'message':'Something went wrong'
+            })
 
     def put(self, request):
 

@@ -10,7 +10,7 @@ class TodoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Todo
         # fields = '__all__'
-        fields = ['todo_title','slug','todo_description','is_done','uid']
+        fields = ['user','todo_title','slug','todo_description','is_done','uid']
 
         # for spacific validation
 
